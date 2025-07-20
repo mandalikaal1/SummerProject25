@@ -1,0 +1,122 @@
+<!-- 
+Healthcare Dataset Access v1.0
+July 19, 2025
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Healthcare Dataset Access</title>
+
+  <!--JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+
+
+  <script>
+    $(document).ready(function () {
+
+      //sign-in 
+      $("#login").on("submit", function (event) {
+        window.location.href = 'home.html';
+        event.preventDefault();
+
+        //  $.ajax({
+        //         url: '/home.html',
+        //         success:function(data){
+        //             if(data == "OK")
+        //             {
+        //             }
+        //             else
+        //             {
+        //                 alert("Please try again");
+        //             }
+        //         }
+        //     });
+      });
+
+      //create account
+      $("#create-acct").on("click", function (event) {
+        window.location.href = 'create_account.html';
+        event.preventDefault();
+      });
+
+
+    }); 
+  </script>
+</head>
+
+<body>
+
+  <br>
+  <div class="container justify-content-center ">
+    <h1 class="h1 mb-3 title-bg">Healthcare Dataset <br> Access</h1>
+    <br>
+  </div>
+
+  <div class="container justify-content-center mt-4 align-items-center login-border">
+
+    <!--alert error -->
+    <div class="alert alert-danger alert-dismissible fade show justify-content-center d-none" role="alert"
+      id="access-alert">
+      <strong>Access Denied </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!--login form  -->
+    <form id="login">
+      <h4 class="text-center"> Login </h4>
+      <br>
+      <div class="form-group row">
+        <label for="inputUsername" class="col-sm-3 col-form-label">Username</label>
+        <div class="col-sm-9 ">
+          <input type="text" class="form-control border-dark" id="inputUsername" placeholder="Username" autofocus>
+        </div>
+      </div>
+
+      <br>
+      <div class="form-group row">
+        <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+        <div class="col-sm-9">
+          <input type="password" class="form-control  border-dark" id="inputPassword" placeholder="Password">
+        </div>
+      </div>
+
+      <br>
+      <br>
+
+      <div class="pb-3 border-bottom border-dark">
+        <button type="submit" class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
+          Sign in 
+        </button>
+      </div>
+
+    </form>
+
+    <div class="pt-3">
+      <button type="button" id="create-acct"
+        class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75">
+        Create New Account 
+      </button>
+    </div>
+  </div>
+
+
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>

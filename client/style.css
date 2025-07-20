@@ -1,0 +1,72 @@
+/*
+Healthcare Dataset Access v 1.0
+July 19, 2025
+
+*/
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: white;
+}
+
+table {
+  display: inline-block;
+  overflow: auto;
+}
+
+th div {
+  position: absolute;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.title-bg {
+  background-color: #e3f2fd;
+  text-align: center;
+
+}
+
+.navbar {
+  background-color: #e3f2fd;
+}
+
+.login-border {
+  border: 2px solid #2a7fba;
+  border-radius: 8px;
+  margin: auto !important;
+  padding: 30px;
+  max-width: 480px;
+
+}
+
+.login-button {
+  margin-top: 10px;
+  border: none;
+  padding: 0.85em 4em;
+  display: block;
+  align-items: center;
+}
+
+
+.navbar a:hover {
+  border: 2px solid lightgrey;
+}
+
+.button-width {
+  margin: auto;
+  float: right;
+  max-width: 480px;
+}
+
+.border-form {
+  border: 2px solid #2a7fba;
+  ;
+  border-radius: 8px;
+  margin: auto !important;
+  padding: 2em;
+  width: 500px;
+  height: 300px;
+
+}
