@@ -1,0 +1,122 @@
+<!-- 
+Healthcare Dataset Access v1.0
+July 19, 2025
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Healthcare Dataset Access</title>
+
+  <!-- bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!--JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+   
+      $('#upload-form').submit(function (e) {
+        e.preventDefault();
+           const fileInput = document.getElementById('uploadFile');
+            const uploadFile = fileInput.files[0]; // For a single file
+            console.log(uploadFile); 
+
+        var fileData = new FormData(this); // Automatically includes all form fields
+        fileData.append("file", uploadFile);
+  
+          $.ajax({
+            type: 'POST',
+            url: '/upload',
+            data: fileData, // Data to send to the backend
+            success: function (response) {s
+              console.log("SUCCESS: ", response);
+              // Update the frontend with the response from Flask
+              $('#result').text(response.result);
+            },
+            error: function (error) {
+              console.log("ERROR: ", error);
+            }
+          }); 
+        });
+      });
+
+
+  </script>
+
+
+
+</head>
+
+<body>
+
+
+  <br>
+  <!-- navbar  -->
+  <div class="container">
+    <nav class="navbar navbar-light navbar-expand-lg ms-auto ">
+      <div class=" container-fluid">
+        <a class="navbar-brand" href="home.html">Healthcare Dataset Access</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHealthcareData"
+          aria-controls="navbarHealthcareData" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarHealthcareData">
+          <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link  text-center" aria-current="page" href="home.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link navbar-dark active text-center" href="uploadFile.html">Upload File</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-center" href="view.html">View Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-center" href="index.html">Logout</a>
+            </li>
+
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <br>
+  <!-- upload  -->
+  <h3 class="h3 text-center">Upload New Patient File</h3>
+  <br>
+
+  <div class="border-form ">
+
+    <form id="upload-form">
+      <div class="border p-1 border-dark mt-5">
+        <input type="file" id="uploadFile" name="filename">
+      </div>
+      <div class="pt-4">
+        <button type="submit" class="btn btn-secondary col-6 button-width" id="upload-submit" >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
