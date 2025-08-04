@@ -1,0 +1,166 @@
+<!-- 
+Healthcare Dataset Access v1.0
+July 19, 2025
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Healthcare Dataset Access</title>
+
+  <!--jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!-- bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+  <!-- CSS -->
+   <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
+  <script>
+    $(document).ready(function () {
+      // on click Sign In Button checks with the remote server that username =='admin' and password == 'password'
+
+      // form submit button 
+      $("#createAccountForm").on("submit", function (event) {
+        event.preventDefault();
+
+        const accountForm = document.getElementById('createAccountForm');
+        const accountData = new FormData(accountForm); // Create FormData object from the form
+        const formDataArray = $('#createAccountForm').serializeArray();
+        console.log("Test");
+        console.log(accountData);
+        console.log(formDataArray);
+
+        window.location.href = '/home'; 
+
+        //  $.ajax({
+        //     type: 'POST',
+        //     url: '/newUser',
+        //     data: fileData, // Data to send to the backend
+        //     contentType: false, 
+        //     processData: false, 
+        //     success: function (response) {
+        //       console.log("SUCCESS: ", response.message);
+
+        //       // Update the frontend with the response from Flask
+        //       alert(response.message); 
+        //       window.location.href = '/home';
+        //     },
+        //     error: function (error) {
+        //       console.log("ERROR: ", error);
+        //       alert(error);
+        //     }
+        //   }); 
+      });
+
+      // cancel return to sign-in page 
+      $("#cancel").on("click", function (event) {
+        window.location.href = '/';
+        event.preventDefault();
+      });
+
+    }); 
+  </script>
+</head>
+
+<body>
+
+  <br>
+  <div class="container justify-content-center ">
+    <h1 class="h1 mb-3 title-bg">Healthcare Dataset <br> Access </h1>
+    <br>
+  </div>
+
+  <div class="container justify-content-center mt-4 align-items-center login-border">
+
+    <form id="createAccountForm">
+      <h4 class="text-center"> Create Account </h4>
+      <br>
+      <div class="form-group row">
+        <label for="createFirstName" class="col-sm-3 col-form-label">First Name </label>
+        <div class="col-sm-9 ">
+          <input type="text" name="FirstName" class="form-control border-dark" id="createFirstName"
+            placeholder="First Name" autofocus>
+        </div>
+      </div>
+
+      <br>
+      <div class="form-group row">
+        <label for="createLastName" class="col-sm-3 col-form-label">Last Name </label>
+        <div class="col-sm-9 ">
+          <input type="text" name="LastName" class="form-control border-dark" id="createLastName"
+            placeholder="Last Name" autofocus>
+        </div>
+      </div>
+
+      <br>
+      <div class="form-group row">
+        <label for="createUser" class="col-sm-3 col-form-label">Username</label>
+        <div class="col-sm-9 ">
+          <input type="text" name="Username" class="form-control border-dark" id="createUser" placeholder="Username"
+            autofocus>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="form-group row">
+        <label for="createPassword" class="col-sm-3 col-form-label">Password</label>
+        <div class="col-sm-9">
+          <input type="password" name="Password" class="form-control  border-dark" id="createPassword"
+            placeholder="Password">
+        </div>
+      </div>
+
+      <br>
+
+      <div class="form-group row">
+        <label for="createRole" class="col-sm-3 col-form-label">Role</label>
+        <div class="col-sm-9">
+          <select class="form-select" name="Role" id="createRole">
+            <option value="Patient">Patient</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <br>
+      <br>
+
+      <div class="pb-3">
+        <button type="submit" class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
+          Create
+        </button>
+      </div>
+
+
+    </form>
+
+
+
+    <div class="pb-3">
+      <button type="button" id="cancel"
+        class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
+        Cancel
+      </button>
+    </div>
+
+  </div>
+
+
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>

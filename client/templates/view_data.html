@@ -10,7 +10,8 @@ July 19, 2025
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Healthcare Dataset Access</title>
-  <!--JS -->
+  
+  <!--jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
   <!-- bootstrap -->
@@ -18,7 +19,7 @@ July 19, 2025
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+ <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
 
 </head>
 
@@ -28,10 +29,10 @@ July 19, 2025
   <br>
 
   <!-- navbar -->
-  <div class="container">
+ <div class="container">
     <nav class="navbar navbar-light navbar-expand-lg ms-auto ">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="home.html">Healthcare Dataset Access</a>
+      <div class=" container-fluid">
+        <a class="navbar-brand" href="/home">Healthcare Dataset Access</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHealthcareData"
           aria-controls="navbarHealthcareData" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -39,16 +40,16 @@ July 19, 2025
         <div class="collapse navbar-collapse" id="navbarHealthcareData">
           <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link  text-center" aria-current="page" href="home.html">Home</a>
+              <a class="nav-link  text-center" aria-current="page" href="/home">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  text-center" href="uploadFile.html">Upload File</a>
+              <a class="nav-link  text-center" href="/upload_file">Upload File</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link navbar-dark active text-center" href="view.html">View Data</a>
+              <a class="nav-link navbar-dark active text-center" href="/view_data">View Data</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-center" href="index.html">Logout</a>
+              <a class="nav-link text-center" href="/logout">Logout</a>
             </li>
 
           </ul>
@@ -72,15 +73,15 @@ July 19, 2025
 </div>
 
   <!-- table -->
-  <div class="mt-4 text-center">
+  <div class="mt-4  text-center">
     <h2 class="h2 mb-3">Healthcare Dataset Table</h2>
     <br>
   </div>
 
-  <div class="container justify-content-center mt-4 align-items-center">
+  <div class="mx-auto mt-4 mb-5 align-items-center">
 
-    <table class="table" id="data-table">
-      <thead id="data-title">
+    <table class="table  table-hover table-striped" id="data-table">
+      <thead class="table-primary" id="data-title">
         <tr>
 
         </tr>
@@ -91,7 +92,11 @@ July 19, 2025
     </table>
   </div>
 
-  <script src="viewTable.js"></script>
+  <!-- <div class="mt-4">
+    <br>
+  </div> -->
+
+  <script src="{{url_for('views_bp.static', filename='js/viewTable.js')}}"></script>
 
 
   <!-- Bootstrap JS -->

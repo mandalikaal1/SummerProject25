@@ -16,7 +16,7 @@ July 19, 2025
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
 
   <!--JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -24,31 +24,36 @@ July 19, 2025
   <script>
     $(document).ready(function () {
 
-   
-      $('#upload-form').submit(function (e) {
-        e.preventDefault();
-           const fileInput = document.getElementById('uploadFile');
-            const uploadFile = fileInput.files[0]; // For a single file
-            console.log(uploadFile); 
 
-        var fileData = new FormData(this); // Automatically includes all form fields
+      $('#upload-form').submit(function (event) {
+        event.preventDefault();
+
+        var fileInput = document.getElementById('formFile');
+        var uploadFile = fileInput.files[0]; // For a single file
+
+        var fileData = new FormData(this); // get fields from form
         fileData.append("file", uploadFile);
-  
+        var uploadForm = document.getElementById('upload-form'); 
           $.ajax({
             type: 'POST',
             url: '/upload',
             data: fileData, // Data to send to the backend
-            success: function (response) {s
-              console.log("SUCCESS: ", response);
+            contentType: false, 
+            processData: false, 
+            success: function (response) {
+              console.log("SUCCESS: ", response.message);
+
               // Update the frontend with the response from Flask
-              $('#result').text(response.result);
+              alert(response.message); 
+              uploadForm.reset(); 
             },
             error: function (error) {
               console.log("ERROR: ", error);
+              alert(error);
             }
           }); 
         });
-      });
+    });
 
 
   </script>
@@ -65,7 +70,7 @@ July 19, 2025
   <div class="container">
     <nav class="navbar navbar-light navbar-expand-lg ms-auto ">
       <div class=" container-fluid">
-        <a class="navbar-brand" href="home.html">Healthcare Dataset Access</a>
+        <a class="navbar-brand" href="/home">Healthcare Dataset Access</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHealthcareData"
           aria-controls="navbarHealthcareData" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -73,16 +78,16 @@ July 19, 2025
         <div class="collapse navbar-collapse" id="navbarHealthcareData">
           <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link  text-center" aria-current="page" href="home.html">Home</a>
+              <a class="nav-link  text-center" aria-current="page" href="/home">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link navbar-dark active text-center" href="uploadFile.html">Upload File</a>
+              <a class="nav-link navbar-dark active text-center" href="/upload_file">Upload File</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-center" href="view.html">View Data</a>
+              <a class="nav-link text-center" href="/view_data">View Data</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-center" href="index.html">Logout</a>
+              <a class="nav-link text-center" href="/logout">Logout</a>
             </li>
 
           </ul>
@@ -97,14 +102,16 @@ July 19, 2025
   <h3 class="h3 text-center">Upload New Patient File</h3>
   <br>
 
+
   <div class="border-form ">
 
-    <form id="upload-form">
+    <!-- <form id="upload-form" method="POST" enctype="multipart/form-data"> -->
+      <form id="upload-form" enctype="multipart/form-data">
       <div class="border p-1 border-dark mt-5">
-        <input type="file" id="uploadFile" name="filename">
+        <input type="file" id="formFile" name="file">
       </div>
       <div class="pt-4">
-        <button type="submit" class="btn btn-secondary col-6 button-width" id="upload-submit" >
+        <button type="submit" class="btn btn-secondary col-6 button-width" id="upload-submit">
           Submit
         </button>
       </div>

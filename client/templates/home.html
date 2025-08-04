@@ -11,7 +11,7 @@ July 19, 2025
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Healthcare Dataset Access</title>
 
-  <!--JS -->
+  <!--jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
   <!-- bootstrap -->
@@ -19,8 +19,9 @@ July 19, 2025
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
 
+   
 </head>
 
 <body>
@@ -31,32 +32,32 @@ July 19, 2025
     <!--navbar -->
   <div class="container">
     <nav class="navbar navbar-light navbar-expand-lg ms-auto ">
-  <div class=" container-fluid">
-      <a class="navbar-brand" href="home.html">Healthcare Dataset Access</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHealthcareData"
-        aria-controls="navbarHealthcareData" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarHealthcareData">
-        <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link navbar-dark active text-center" aria-current="page" href="home.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-center" href="uploadFile.html">Upload File</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-center" href="view.html">View Data</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-center" href="index.html">Logout</a>
-          </li>
+      <div class=" container-fluid">
+        <a class="navbar-brand" href="/home">Healthcare Dataset Access</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHealthcareData"
+          aria-controls="navbarHealthcareData" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarHealthcareData">
+          <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link navbar-dark active text-center" aria-current="page" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  text-center" href="/upload_file">Upload File</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-center" href="/view_data">View Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-center" href="/logout">Logout</a>
+            </li>
 
-        </ul>
+          </ul>
 
+        </div>
       </div>
-  </div>
-  </nav>
+    </nav>
   </div>
 
   <br>
@@ -71,7 +72,7 @@ July 19, 2025
         
       <div class="row justify-content-center">
         <div class="col border-bottom mt-4 pb-4 button-width">
-          <a href="uploadFile.html">
+          <a href="/upload_file">
 
 
             <button class="btn btn-secondary btn-lg btn-rounded-pill 
@@ -84,7 +85,7 @@ July 19, 2025
      <!--view table  -->
     <div class="row justify-content-center">
       <div class="col button-width pt-4">
-        <a href="view.html">
+        <a href="/view_data">
           <button class="btn btn-secondary btn-lg btn-rounded-pill 
    d-grid gap-2 col-6 mx-auto w-75"> View Data </button>
         </a>

@@ -9,12 +9,14 @@ body {
   background-color: white;
 }
 
-table {
-  display: inline-block;
-  overflow: auto;
+.table {
+  margin: auto;
+  width: 50% !important; 
+  overflow-x: auto; 
+
 }
 
-th div {
+.th div {
   position: absolute;
 }
 

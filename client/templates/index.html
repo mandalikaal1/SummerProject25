@@ -18,7 +18,7 @@ July 19, 2025
   <!-- CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css">
+ <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
 
 
   <script>
@@ -26,26 +26,33 @@ July 19, 2025
 
       //sign-in 
       $("#login").on("submit", function (event) {
-        window.location.href = 'home.html';
+        window.location.href = '/home';
         event.preventDefault();
 
-        //  $.ajax({
-        //         url: '/home.html',
-        //         success:function(data){
-        //             if(data == "OK")
-        //             {
-        //             }
-        //             else
-        //             {
-        //                 alert("Please try again");
-        //             }
-        //         }
-        //     });
+    //  $.ajax({
+        //     type: 'POST',
+        //     url: '/checkUser',
+        //     data: fileData, // Data to send to the backend
+        //     contentType: false, 
+        //     processData: false, 
+        //     success: function (response) {
+        //       console.log("SUCCESS: ", response.message);
+
+        //       // Update the frontend with the response from Flask
+        //       alert(response.message); 
+        //       window.location.href = '/home';
+        //     },
+        //     error: function (error) {
+        //       console.log("ERROR: ", error);
+        //       alert(error);
+        //     }
+        //   }); 
       });
+
 
       //create account
       $("#create-acct").on("click", function (event) {
-        window.location.href = 'create_account.html';
+        window.location.href = '/create_account';
         event.preventDefault();
       });
 
