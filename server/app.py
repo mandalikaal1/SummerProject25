@@ -1,8 +1,13 @@
 import pandas as pd
 from encryption_utils import encrypt_text
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from google.cloud import storage
+
+#import client routes
+from client.views import views_bp 
+
+
 
 # GCS config
 GCS_CREDENTIALS = "secrets/summer25project-6eb8d5472350.json"
@@ -12,7 +17,23 @@ GCS_BUCKET_NAME = "summer25project"
 storage_client = storage.Client.from_service_account_json(GCS_CREDENTIALS)
 bucket = storage_client.bucket(GCS_BUCKET_NAME)
 
-app = Flask(__name__)
+#static folder in client.views
+app = Flask(__name__, static_folder=None)
+
+#import routes
+app.register_blueprint(views_bp)
+
+#-------------------------------------------------
+#***Temp function - please rewrite to retrieve from GCS
+#getting json file from client/static/json folder
+@app.route("/retrieve_data")
+def get_static_data():
+    current_directory = views_bp.root_path
+    file_path = os.path.join(current_directory, 'static\json','output_table.json')
+    print(file_path)
+    return  send_file(file_path)
+
+ #--------------------------------------------------  
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
