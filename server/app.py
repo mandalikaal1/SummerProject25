@@ -3,19 +3,23 @@ from encryption_utils import encrypt_text
 import os
 from flask import Flask, request, jsonify, send_file
 from google.cloud import storage
-
+from datetime import timedelta
 #import client routes
-from client.views import views_bp 
+from client.views import views_bp
+from google.oauth2 import service_account
+
 
 
 
 # GCS config
-GCS_CREDENTIALS = "secrets/summer25project-6eb8d5472350.json"
+GCS_CREDENTIALS = "summer25project-6eb8d5472350.json"
 GCS_BUCKET_NAME = "summer25project"
 
 # Initialize GCS client
 storage_client = storage.Client.from_service_account_json(GCS_CREDENTIALS)
 bucket = storage_client.bucket(GCS_BUCKET_NAME)
+credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
+
 
 #static folder in client.views
 app = Flask(__name__, static_folder=None)
@@ -33,7 +37,7 @@ def get_static_data():
     print(file_path)
     return  send_file(file_path)
 
- #--------------------------------------------------  
+ #--------------------------------------------------
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
@@ -79,5 +83,38 @@ def upload_file():
         "message": "File encrypted and uploaded to GCS!",
         "encrypted_file_gcs_path": f"gs://{GCS_BUCKET_NAME}/encrypted/{encrypted_filename}",
     }), 200
+
+@app.route("/download", methods=["GET"])
+def generate_download_link():
+    from google.cloud import storage
+    from google.oauth2 import service_account
+    from datetime import timedelta
+
+    GCS_CREDENTIALS = "summer25project-6eb8d5472350.json"
+    GCS_BUCKET_NAME = "summer25project"
+
+    credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
+    storage_client = storage.Client(credentials=credentials)
+    bucket = storage_client.bucket(GCS_BUCKET_NAME)
+
+    filename = request.args.get("filename")
+    if not filename:
+        return jsonify({"error": "Missing filename"}), 400
+
+    blob = bucket.blob(f"encrypted/{filename}")
+    if not blob.exists():
+        return jsonify({"error": f"File '{filename}' not found"}), 404
+
+    url = blob.generate_signed_url(
+        version="v4",  # ✅ THIS MATTERS
+        expiration=timedelta(minutes=15),
+        method="GET",
+        credentials=credentials  # ✅ Make sure it uses the same creds
+    )
+
+    return url, 200, {'Content-Type': 'text/plain'}
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
