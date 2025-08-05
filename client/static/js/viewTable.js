@@ -33,7 +33,8 @@ function loadAttributes(userVal) {
     }
     else if (selectedValue == "Doctor") {
         tableAttributes.push("Name", "Age", "Gender", "Blood Type", "Medical Condition", "Date of Admission",
-            "Hospital", "Discharge Date", "Medication", "Test Results");
+            "Doctor", "Hospital", "Billing Amount", "Room Number", "Admission Type", "Discharge Date", "Medication",
+            "Test Results");
 
 
     }
