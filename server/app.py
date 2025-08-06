@@ -64,8 +64,8 @@ def get_static_data():
     df.to_json(json_output_path, orient='records', indent=2)
     
     
-    table_json = os.path.join(client_directory, 'static\json', 'output_table.json')
-    return  send_file(table_json)
+    #table_json = os.path.join(client_directory, 'static\json', 'output_table.json')
+    return  send_file(json_output_path)
     
 
  #--------------------------------------------------
