@@ -20,42 +20,50 @@ July 19, 2025
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
   <!-- CSS -->
-   <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
+
   <script>
     $(document).ready(function () {
       // on click Sign In Button checks with the remote server that username =='admin' and password == 'password'
 
       // form submit button 
-      $("#createAccountForm").on("submit", function (event) {
-        event.preventDefault();
+      $("#create").on("click", function (event) {
+        var createFirstName = $("#createFirstName").val();
+        var createLastName = $("#createLastName").val();
+        var createUsername = $("#createUsername").val();
+        var createPassword = $("#createPassword").val();
+        var createRole = $("#createRole :selected").val();
 
-        const accountForm = document.getElementById('createAccountForm');
-        const accountData = new FormData(accountForm); // Create FormData object from the form
-        const formDataArray = $('#createAccountForm').serializeArray();
-        console.log("Test");
-        console.log(accountData);
-        console.log(formDataArray);
 
-        window.location.href = '/home'; 
 
-        //  $.ajax({
-        //     type: 'POST',
-        //     url: '/newUser',
-        //     data: fileData, // Data to send to the backend
-        //     contentType: false, 
-        //     processData: false, 
-        //     success: function (response) {
-        //       console.log("SUCCESS: ", response.message);
+        var userData = new FormData(); // Create FormData object from the form
 
-        //       // Update the frontend with the response from Flask
-        //       alert(response.message); 
-        //       window.location.href = '/home';
-        //     },
-        //     error: function (error) {
-        //       console.log("ERROR: ", error);
-        //       alert(error);
-        //     }
-        //   }); 
+        userData.append("firstname", createFirstName);
+        userData.append("lastname", createLastName);
+         userData.append("username", createUsername);
+        userData.append("password", createPassword);
+          userData.append("role", createRole);
+
+        console.log(createFirstName);
+
+        $.ajax({
+          url: '/createUser',
+          type: 'POST',
+          data: userData, // Data to send to the backend
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            console.log("SUCCESS: ", response.message);
+
+            // Update the frontend with the response from Flask
+            alert(response.message);
+            window.location.href = '/home';
+          },
+          error: function (error) {
+            console.log("ERROR: ", error);
+            alert(error);
+          }
+        });
       });
 
       // cancel return to sign-in page 
@@ -93,17 +101,17 @@ July 19, 2025
       <div class="form-group row">
         <label for="createLastName" class="col-sm-3 col-form-label">Last Name </label>
         <div class="col-sm-9 ">
-          <input type="text" name="LastName" class="form-control border-dark" id="createLastName"
+          <input type="text" name="createLastName" class="form-control border-dark" id="createLastName"
             placeholder="Last Name" autofocus>
         </div>
       </div>
 
       <br>
       <div class="form-group row">
-        <label for="createUser" class="col-sm-3 col-form-label">Username</label>
+        <label for="createUsername" class="col-sm-3 col-form-label">Username</label>
         <div class="col-sm-9 ">
-          <input type="text" name="Username" class="form-control border-dark" id="createUser" placeholder="Username"
-            autofocus>
+          <input type="text" name="createUsername" class="form-control border-dark" id="createUsername"
+            placeholder="Username" autofocus>
         </div>
       </div>
 
@@ -112,7 +120,7 @@ July 19, 2025
       <div class="form-group row">
         <label for="createPassword" class="col-sm-3 col-form-label">Password</label>
         <div class="col-sm-9">
-          <input type="password" name="Password" class="form-control  border-dark" id="createPassword"
+          <input type="password" name="createPassword" class="form-control  border-dark" id="createPassword"
             placeholder="Password">
         </div>
       </div>
@@ -121,8 +129,8 @@ July 19, 2025
 
       <div class="form-group row">
         <label for="createRole" class="col-sm-3 col-form-label">Role</label>
-        <div class="col-sm-9">
-          <select class="form-select" name="Role" id="createRole">
+        <div class="col-sm-9" >
+          <select class="form-select border-dark" name="createRole"  id="createRole">
             <option value="Patient">Patient</option>
             <option value="Doctor">Doctor</option>
             <option value="Admin">Admin</option>
@@ -134,7 +142,8 @@ July 19, 2025
       <br>
 
       <div class="pb-3">
-        <button type="submit" class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
+        <button type="button" id="create"
+          class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
           Create
         </button>
       </div>
