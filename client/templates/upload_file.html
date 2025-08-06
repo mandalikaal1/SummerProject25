@@ -78,11 +78,13 @@ July 19, 2025
         <div class="collapse navbar-collapse" id="navbarHealthcareData">
           <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link  text-center" aria-current="page" href="/home">Home</a>
+              <a class="nav-link navbar-dark active text-center" aria-current="page" href="/home">Home</a>
             </li>
+            {% if session['role'] != "Patient" %}
             <li class="nav-item">
-              <a class="nav-link navbar-dark active text-center" href="/upload_file">Upload File</a>
+              <a class="nav-link  text-center" href="/upload_file">Upload File</a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link text-center" href="/view_data">View Data</a>
             </li>
@@ -102,7 +104,18 @@ July 19, 2025
   <h3 class="h3 text-center">Upload New Patient File</h3>
   <br>
 
+   {% if session['role'] == "Patient" %}
+   <div class="mt-4">
+   <h3 class="h3 text-center">
 
+    Access Denied
+
+    </h3>
+
+   </div>
+    <br>
+  
+  {% else %}
   <div class="border-form ">
 
     <!-- <form id="upload-form" method="POST" enctype="multipart/form-data"> -->
@@ -117,7 +130,9 @@ July 19, 2025
       </div>
     </form>
   </div>
+ {% endif %}
 
+ 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"

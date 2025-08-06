@@ -1,13 +1,16 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, jsonify, render_template, request, redirect, url_for, session
+import sqlite3
 
 views_bp = Blueprint("views_bp", __name__, 
                      template_folder ="templates",  
                      static_folder='static')
 
 
+
 @views_bp.route("/")
-def index():
+def index():    
     return render_template("index.html")
+
 
 @views_bp.route("/create_account")
 def create_account():
@@ -15,6 +18,7 @@ def create_account():
 
 @views_bp.route("/home")
 def home(): 
+
     return render_template("home.html")
 
 @views_bp.route("/upload_file")
@@ -28,6 +32,9 @@ def view_Data():
 
 @views_bp.route("/logout")
 def logout(): 
+    session.pop("name", None)
+    session.pop("role", None)
+    print("logout")
     return redirect(url_for("views_bp.index"))
 
 

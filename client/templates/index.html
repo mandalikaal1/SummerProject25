@@ -25,28 +25,42 @@ July 19, 2025
     $(document).ready(function () {
 
       //sign-in 
-      $("#login").on("submit", function (event) {
-        window.location.href = '/home';
-        event.preventDefault();
+      $("#submit").on("click", function (event) {
+       
+        var fileData = new FormData(); // Create FormData object from the form
 
-    //  $.ajax({
-        //     type: 'POST',
-        //     url: '/checkUser',
-        //     data: fileData, // Data to send to the backend
-        //     contentType: false, 
-        //     processData: false, 
-        //     success: function (response) {
-        //       console.log("SUCCESS: ", response.message);
+        var inputUsername = $("#inputUsername").val();
+        var inputPassword = $("#inputPassword").val();
 
-        //       // Update the frontend with the response from Flask
-        //       alert(response.message); 
-        //       window.location.href = '/home';
-        //     },
-        //     error: function (error) {
-        //       console.log("ERROR: ", error);
-        //       alert(error);
-        //     }
-        //   }); 
+        fileData.append("username", inputUsername);
+        fileData.append("password", inputPassword);
+
+     $.ajax({
+            type: 'POST',
+            url: '/checkUser',
+            data: fileData, // Data to send to the backend
+            contentType: false, 
+            processData: false, 
+            success: function (response) {
+              console.log("SUCCESS: ", response.message);
+              if(response.message == "Success"){
+                   // Update the frontend with the response from Flask
+                loginForm.reset();
+                window.location.href = '/home';
+              }
+              else{
+                alert(response.message);
+                loginForm.reset(); 
+              }
+             
+
+           
+            },
+            error: function (error) {
+              console.log("ERROR: ", error);
+              alert(error);
+            }
+          }); 
       });
 
 
@@ -79,13 +93,13 @@ July 19, 2025
     </div>
 
     <!--login form  -->
-    <form id="login">
+    <form id="loginForm">
       <h4 class="text-center"> Login </h4>
       <br>
       <div class="form-group row">
         <label for="inputUsername" class="col-sm-3 col-form-label">Username</label>
         <div class="col-sm-9 ">
-          <input type="text" class="form-control border-dark" id="inputUsername" placeholder="Username" autofocus>
+          <input type="text" class="form-control border-dark" name="username" id="inputUsername" placeholder="Username" autofocus>
         </div>
       </div>
 
@@ -93,7 +107,7 @@ July 19, 2025
       <div class="form-group row">
         <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
         <div class="col-sm-9">
-          <input type="password" class="form-control  border-dark" id="inputPassword" placeholder="Password">
+          <input type="password" class="form-control  border-dark" name="password" id="inputPassword" placeholder="Password">
         </div>
       </div>
 
@@ -101,7 +115,7 @@ July 19, 2025
       <br>
 
       <div class="pb-3 border-bottom border-dark">
-        <button type="submit" class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
+        <button type="button" id="submit" class="btn  btn-secondary btn-lg btn-rounded-pill d-grid gap-2 col-6 mx-auto w-75 ">
           Sign in 
         </button>
       </div>
@@ -117,7 +131,7 @@ July 19, 2025
   </div>
 
 
-
+ <p>{{student_data}}</p>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"

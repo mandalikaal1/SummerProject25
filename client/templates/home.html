@@ -43,9 +43,13 @@ July 19, 2025
             <li class="nav-item">
               <a class="nav-link navbar-dark active text-center" aria-current="page" href="/home">Home</a>
             </li>
+
+            {% if session['role'] != "Patient" %}
             <li class="nav-item">
               <a class="nav-link  text-center" href="/upload_file">Upload File</a>
             </li>
+            {% endif %}
+
             <li class="nav-item">
               <a class="nav-link text-center" href="/view_data">View Data</a>
             </li>
@@ -69,19 +73,24 @@ July 19, 2025
    <!--upload  -->
     <div class="container d-flex flex-column">
 
+ 
         
       <div class="row justify-content-center">
         <div class="col border-bottom mt-4 pb-4 button-width">
+
+            {% if session['role'] != "Patient" %}
           <a href="/upload_file">
 
 
             <button class="btn btn-secondary btn-lg btn-rounded-pill 
        d-grid gap-2 col-6 mx-auto w-75"> Upload File </button>
           </a>
+            {% endif %}
         </div>
       </div>
     </div>
-
+   
+     
      <!--view table  -->
     <div class="row justify-content-center">
       <div class="col button-width pt-4">
@@ -92,8 +101,6 @@ July 19, 2025
       </div>
     </div>
   </div>
-
-
 
 
 

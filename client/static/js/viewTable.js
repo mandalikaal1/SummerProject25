@@ -7,7 +7,8 @@ selectButton.addEventListener('click', function () {
 
     const dropdown = document.getElementById("user");
     const selectedValue = dropdown.value; // Gets the value of the selected option
-
+    console.log(selectedValue); 
+    
     //load attributes
     tableAttributes = new Array();
     loadAttributes(selectedValue);
@@ -18,6 +19,7 @@ selectButton.addEventListener('click', function () {
 
 
 });
+
 
 function loadAttributes(userVal) {
     //select user role
@@ -33,8 +35,7 @@ function loadAttributes(userVal) {
     }
     else if (selectedValue == "Doctor") {
         tableAttributes.push("Name", "Age", "Gender", "Blood Type", "Medical Condition", "Date of Admission",
-            "Doctor", "Hospital", "Billing Amount", "Room Number", "Admission Type", "Discharge Date", "Medication",
-            "Test Results");
+            "Hospital", "Discharge Date", "Medication", "Test Results");
 
 
     }
@@ -82,7 +83,7 @@ function viewData(userVal) {
 
 
 
-            const slicedData = data.patients.slice(0, 30); // Extracts the first 20 elements
+            const slicedData = data.slice(0, 30); // Extracts the first 20 elements
             slicedData.forEach(item => {
                 const row = document.createElement('tr');
 

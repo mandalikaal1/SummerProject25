@@ -10,7 +10,7 @@ July 19, 2025
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Healthcare Dataset Access</title>
-  
+
   <!--jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -19,7 +19,7 @@ July 19, 2025
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
   <!-- CSS -->
- <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('views_bp.static', filename='css/style.css')}}">
 
 </head>
 
@@ -29,7 +29,7 @@ July 19, 2025
   <br>
 
   <!-- navbar -->
- <div class="container">
+  <div class="container">
     <nav class="navbar navbar-light navbar-expand-lg ms-auto ">
       <div class=" container-fluid">
         <a class="navbar-brand" href="/home">Healthcare Dataset Access</a>
@@ -42,9 +42,11 @@ July 19, 2025
             <li class="nav-item">
               <a class="nav-link  text-center" aria-current="page" href="/home">Home</a>
             </li>
+            {% if session['role'] != "Patient" %}
             <li class="nav-item">
               <a class="nav-link  text-center" href="/upload_file">Upload File</a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link navbar-dark active text-center" href="/view_data">View Data</a>
             </li>
@@ -61,21 +63,20 @@ July 19, 2025
 
   <!-- Temporary views -->
 
-<div class="dropdown mt-4 col-6 text-center">
-  Temp Views: 
- <select id="user">
-  <option value="Admin">Admin View</option>
-  <option value="Doctor">Doctor View</option>
-  <option value="Patient">Patient View</option>
-</select>
-<button id="select">Select</button>
-<p id="selectedValueDisplay"></p>
-</div>
 
   <!-- table -->
   <div class="mt-4  text-center">
     <h2 class="h2 mb-3">Healthcare Dataset Table</h2>
     <br>
+  </div>
+
+
+  <div class="text-center">
+    <!-- {{role }} from flask -->
+    <input type="hidden" id="user" value={{ session['role'] }}>
+
+    <button id="select">View Data </button>
+    <p id="selectedValueDisplay"></p>
   </div>
 
   <div class="mx-auto mt-4 mb-5 align-items-center">

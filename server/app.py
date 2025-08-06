@@ -1,14 +1,14 @@
 import pandas as pd
 from encryption_utils import encrypt_text
 import os
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, session
 from google.cloud import storage
 from datetime import timedelta
-#import client routes
-from client.views import views_bp
 from google.oauth2 import service_account
 
-
+#import client routes
+from client.views import views_bp
+from connect import connect_bp
 
 
 # GCS config
@@ -21,21 +21,52 @@ bucket = storage_client.bucket(GCS_BUCKET_NAME)
 credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
 
 
+
 #static folder in client.views
 app = Flask(__name__, static_folder=None)
+app.secret_key = "secret_key_cloud_test" 
 
 #import routes
 app.register_blueprint(views_bp)
+app.register_blueprint(connect_bp)
 
 #-------------------------------------------------
 #***Temp function - please rewrite to retrieve from GCS
 #getting json file from client/static/json folder
 @app.route("/retrieve_data")
 def get_static_data():
-    current_directory = views_bp.root_path
-    file_path = os.path.join(current_directory, 'static\json','output_table.json')
-    print(file_path)
-    return  send_file(file_path)
+    
+    client_directory = views_bp.root_path
+  
+    #open encrypted file
+    encrypted_file ='encrypted_output.csv'
+    test_file = os.path.join('uploads', encrypted_file)
+    df = pd.read_csv(test_file)
+    
+    #decrypt file
+    columns_to_decrypt = [
+        'Name', 'Gender', 'Blood Type', 'Medical Condition',
+        'Doctor', 'Insurance Provider', 'Billing Amount',
+        'Room Number', 'Medication', 'Test Results'
+    ]
+    
+    for col in columns_to_decrypt:
+        if col in df.columns:
+            df[col] = df[col].astype(str).apply(decrypt_text)
+
+
+    #fix the dates after decrypt
+    dates = ["Date of Admission", "Discharge Date"]
+    for col in dates:
+        df[col] = df[col].str.replace('/', '-')
+
+    json_output_path = os.path.join('json', 'decrypt_output.json')
+    df.to_json(json_output_path, orient='records', indent=2)
+    
+    
+    table_json = os.path.join(client_directory, 'static\json', 'output_table.json')
+    return  send_file(table_json)
+    
 
  #--------------------------------------------------
 
