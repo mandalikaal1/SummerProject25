@@ -1,5 +1,5 @@
 import pandas as pd
-from encryption_utils import encrypt_text
+from encryption_utils import encrypt_text, decrypt_text
 import os
 from flask import Flask, request, jsonify, send_file, session
 from google.cloud import storage
@@ -35,9 +35,7 @@ app.register_blueprint(connect_bp)
 #getting json file from client/static/json folder
 @app.route("/retrieve_data")
 def get_static_data():
-    
-    client_directory = views_bp.root_path
-  
+      
     #open encrypted file
     encrypted_file ='encrypted_output.csv'
     test_file = os.path.join('uploads', encrypted_file)
@@ -60,12 +58,27 @@ def get_static_data():
     for col in dates:
         df[col] = df[col].str.replace('/', '-')
 
+    #filter data by user
+    if(session['role'] == "Patient"):
+        filtered_df = df[df['Name'].str.lower() == session['name'].lower()]
+        
+    elif(session['role'] == "Doctor"):
+        filtered_df = df[df['Doctor'].str.lower() == session['name'].lower()]
+        
+    elif(session['role'] == "Admin"):
+        filtered_df = df.copy()
+    else:
+        #data not found = empty dataset
+        filtered_df = pd.Dataframe()
+        
+    #display uploaded file
     json_output_path = os.path.join('json', 'decrypt_output.json')
-    df.to_json(json_output_path, orient='records', indent=2)
+    filtered_df.to_json(json_output_path, orient='records', indent=2)
     
-    
-    #table_json = os.path.join(client_directory, 'static\json', 'output_table.json')
+    #display whole dataset
+   # table_json = os.path.join(client_directory, 'json', 'complete_dataset.json')
     return  send_file(json_output_path)
+    
     
 
  #--------------------------------------------------
