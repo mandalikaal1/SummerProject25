@@ -57,20 +57,11 @@ def sqlite_test(formName, formPassword):
     c.execute(query)
     results = c.fetchone()
     
+    #close database connection
     conn.close()
     
     return results
 
-
-# def check_password(db_password, form_password):
-#     if check_password_hash(db_password, form_password):
-#        # Passwords match, user is authenticated
-#        print("Login successful!")
-#        return True
-#     else:
-#        # Passwords do not match
-#        print("Invalid credentials.")
-#        return False
 
 
 @connect_bp.route("/createUser", methods=["POST"])
@@ -81,17 +72,22 @@ def createUser():
       firstName = request.form["firstname"]
       lastName = request.form["lastname"]
       role = request.form["role"]
-      print(username, password, firstName, lastName, role)
+ 
       results = sqlite_addUser(username, password, firstName, lastName, role)
       if results: 
       
         return jsonify({
-                  "message": "Success",
+                  "message": "Success! Please login with new account.",
               }), 200
+      else: 
+         
+        return jsonify({
+            "message": "Username already exists. Please try another username.",
+        }), 200
       
     else:
       return jsonify({
-          "message": "Data error. Please try again.",
+          "message": "Form error. Please try again.",
       }), 200
   
 
@@ -100,17 +96,33 @@ def sqlite_addUser(username, password, firstName, lastName, role):
     conn = sqlite3.connect(db_locale)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
-    
+   
     hashed_password = generate_password_hash(password)
     
-    query = "INSERT INTO ids(username, password, first_name, last_name, role) VALUES('"+username+"', '"+hashed_password+"', '"+firstName+"', '"+lastName+"', '"+role+"')"
-    c.execute(query)
-    c.commit()
+    try: 
+        #insert new user into database
+        query = "INSERT INTO ids(username, password, first_name, last_name, role) VALUES('"+username+"', '"+hashed_password+"', '"+firstName+"', '"+lastName+"', '"+role+"')"
+        c.execute(query)
+        conn.commit()
     
-    #check if username was inserted into database
-    query2 = "SELECT * FROM ids WHERE username='"+username+"'"
-    c.execute(query2)
-    results = c.fetchone()
- 
-    conn.close()
-    return results
+        #check user is in the database
+        query2 = "SELECT * FROM ids WHERE username='"+username+"'"
+        c.execute(query2)
+        results = c.fetchone()
+  
+        #close database connection
+        conn.close()
+        return results
+    
+    except sqlite3.Error as e: # Catch specific database errors
+        print(f"Error during commit: {e}")
+        if conn:
+            conn.rollback() # Rollback changes if commit fails
+            print("Transaction rolled back.")
+        return False
+
+    finally:
+        if conn:
+            conn.close() # Ensure the connection is closed
+       
+    
