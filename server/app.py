@@ -32,7 +32,6 @@ GCS_BUCKET_NAME = "summer25project"
 storage_client = ""
 bucket = ""
 credentials = ""
-blob = ""
 
 
 #-------------Flask app init ---- relocate static folder in client.views
@@ -54,15 +53,10 @@ app.register_blueprint(connect_bp)
 def gcs_init():
  
     try: 
-        #----- initialize client variables
+        #----- set global GCS variables
         storage_client = storage.Client.from_service_account_json(GCS_CREDENTIALS)
         bucket = storage_client.bucket(GCS_BUCKET_NAME)
         credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
-        blob = bucket.blob(f"encrypted/{encrypted_filename}")
-
-        if not blob.exists():
-            print("GCS Init fail")
-            return False 
 
         return True
 
@@ -73,13 +67,15 @@ def gcs_init():
 #-------------------------------------------------
 # ------------- Download file from GCS 
 #-------------------------------------------------
-def download_blob(bucket, blob, local_path):
+def download_blob(bucket, local_path):
     storage_client = storage.Client(credentials=credentials)
     bucket = storage_client.bucket(bucket)
-    blob = bucket.blob(blob)
+    blob = bucket.blob(f"encrypted/{encrypted_filename}")
 
     if not blob.exists():
-        return False
+        print("GCS Init fail")
+        return False 
+
     
     try: 
         blob.download_to_filename(local_path) 
@@ -99,7 +95,7 @@ def get_static_data():
    
       #retrieve data from GCS
       try:
-          download_blob(bucket, blob, local_download_path)
+          download_blob(bucket, local_download_path)
           
           #convert file from "downloads" folder to dataframe
           df = pd.read_csv(local_download_path)
@@ -233,6 +229,6 @@ def generate_download_link():
 
 
 if __name__ == "__main__":
-    #app.run(debug=True)
-    app.run()
+    app.run(debug=True)
+
   
