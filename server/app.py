@@ -212,9 +212,8 @@ def generate_download_link():
     blob = bucket.blob(f"encrypted/{encrypted_filename}")
 
     if not blob.exists():
-        return jsonify({"error": f"File '{filename}' not found"}), 404
+        return jsonify({"error": f"File '{encrypted_filename}' not found"}), 404
 
-    blob.download_to_filename(destination_file_name)
 
     url = blob.generate_signed_url(
         version="v4",  # ✅ THIS MATTERS
@@ -230,5 +229,6 @@ def generate_download_link():
 
 if __name__ == "__main__":
     app.run(debug=True)
+  
 
   
