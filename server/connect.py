@@ -1,19 +1,22 @@
-from flask import Blueprint, jsonify, render_template, request, redirect, url_for, session
+from flask import Blueprint, jsonify, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
-from client.views import views_bp
 
-
-
+#------------create route for file
 connect_bp = Blueprint("connect_bp", __name__)
 
 
 
-#database table
-
+#-------------------------------------------------
+# ---- SQLite Database file
+#-------------------------------------------------
 db_locale = 'db.sqlite'
 
+
+#-------------------------------------------------
+# ------------- Download file from GCS 
+#-------------------------------------------------
 @connect_bp.route("/checkUser", methods=["POST"])
 def checkUser():    
     if request.method =='POST':
@@ -21,14 +24,12 @@ def checkUser():
       name = request.form["username"]
       password = request.form["password"]
   
-      result = sqlite_test(name, password)
+      result = sqlite_test(name)
       
       if result: 
         if(check_password_hash(result['password'], password)):
             session['name'] = result['first_name'] + ' ' + result['last_name']
-            print(session['name'])
             session['role'] = result['role']
-            print(session['role'])
             
             return jsonify({
                 "message": "Success",
@@ -44,10 +45,13 @@ def checkUser():
               "message": "Username/Password is Incorrect. Please try again.",
           }), 200
 
-        
-     
 
-def sqlite_test(formName, formPassword): 
+      
+     
+#-------------------------------------------------
+# ------------- check if user is in database
+#-------------------------------------------------
+def sqlite_test(formName): 
     conn = sqlite3.connect(db_locale)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
@@ -62,7 +66,9 @@ def sqlite_test(formName, formPassword):
     
     return results
 
-
+#---------------------------------------------------------
+# ----------- retrieve data from "Create Account" page
+#---------------------------------------------------------
 
 @connect_bp.route("/createUser", methods=["POST"])
 def createUser():    
@@ -91,6 +97,9 @@ def createUser():
       }), 200
   
 
+#---------------------------------------------------------
+# -------- Add new user to SQLite database
+#---------------------------------------------------------
 
 def sqlite_addUser(username, password, firstName, lastName, role): 
     conn = sqlite3.connect(db_locale)
