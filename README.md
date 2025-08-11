@@ -1,11 +1,11 @@
 # SummerProject25
 I. Installation Instructions:
 
-Please install the following softwares: 
+Install the following softwares: 
 1. SQLite
 2. Python IDE 
 
-Please install the following packages in Python:
+Install the following packages in Python:
 1. Flask
 2. google.cloud
 3. google.oauth2
@@ -16,7 +16,7 @@ Please install the following packages in Python:
 
 II. Usage Instructions:
 
-Please open the app.py file and run. 
-Open server link provided in console to view.
+Run "app.py" file under "server" folder. 
+Open server link provided in console to view pages. 
 
-Use the "sample_patient.csv" file under client->test_file folder as the sample file to upload
+Use the "sample_patient.csv" file under "client->test_file" folder as the sample file to upload
