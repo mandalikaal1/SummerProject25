@@ -28,11 +28,6 @@ local_download_path = os.path.join("downloads", download_filename)
 GCS_CREDENTIALS = "summer25project-6eb8d5472350.json"
 GCS_BUCKET_NAME = "summer25project"
 
-#-------------Initialize GCS client variables ------ see gcs_init() 
-storage_client = ""
-bucket = ""
-credentials = ""
-
 
 #-------------Flask app init ---- relocate static folder in client.views
 app = Flask(__name__, static_folder=None)
@@ -45,45 +40,6 @@ app.register_blueprint(views_bp)
 app.register_blueprint(connect_bp)
 
 
-#------------------------------------------------------
-#----------- initialize to GCS client variables
-#--------------GCS config
-#------------------------------------------------------
-
-def gcs_init():
- 
-    try: 
-        #----- set global GCS variables
-        storage_client = storage.Client.from_service_account_json(GCS_CREDENTIALS)
-        bucket = storage_client.bucket(GCS_BUCKET_NAME)
-        credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
-
-        return True
-
-    except: 
-        print("GCS Init fail")
-        return False
-
-#-------------------------------------------------
-# ------------- Download file from GCS 
-#-------------------------------------------------
-def download_blob(bucket, local_path):
-    storage_client = storage.Client(credentials=credentials)
-    bucket = storage_client.bucket(bucket)
-    blob = bucket.blob(f"encrypted/{encrypted_filename}")
-
-    if not blob.exists():
-        print("GCS Init fail")
-        return False 
-
-    
-    try: 
-        blob.download_to_filename(local_path) 
-        print("Download from GCS success")
-        return True
-    except:
-        return False
-   
 
 #------------------------------------------------------
 #---------Retrieve Data from GCS or local folder
@@ -91,24 +47,28 @@ def download_blob(bucket, local_path):
 @app.route("/retrieve_data")
 def get_static_data():
     
-    if(gcs_init()):
-   
-      #retrieve data from GCS
-      try:
-          download_blob(bucket, local_download_path)
-          
-          #convert file from "downloads" folder to dataframe
-          df = pd.read_csv(local_download_path)
-          print("Success! Retrieved from GCS")
-      except:
-          return jsonify({"message": f"File '{file_name}' not found in GCS"}), 404
-      
+    
+    #retrieve data from GCS
+    try:
+        #initialize GCS
+        storage_client = storage.Client.from_service_account_json(GCS_CREDENTIALS)
+        credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
+       
+        bucket = storage_client.bucket(GCS_BUCKET_NAME)  
+        encrypted_blob = bucket.blob(f"encrypted/{encrypted_filename}")
         
-      
-    else:
-      #open encrypted file locally
-      df = pd.read_csv(local_encrypted_path)
-      print("Retrieve from local file")
+        #download file from GCS
+        encrypted_blob.download_to_filename(local_download_path)
+  
+        
+        #convert file from "downloads" folder to dataframe
+        df = pd.read_csv(local_download_path)
+        print("Success! Retrieved from GCS")
+    except:
+       
+        #open encrypted file locally
+        df = pd.read_csv(local_encrypted_path)
+        print("Retrieve from local file")
     
     
     #decrypt file
@@ -180,10 +140,14 @@ def upload_file():
 
     # ⬆️ Upload original + encrypted to GCS
 
-    if(gcs_init()):
-        
+    try:
+        #initialize GCS client
+        storage_client = storage.Client.from_service_account_json(GCS_CREDENTIALS)
+        credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
+        bucket = storage_client.bucket(GCS_BUCKET_NAME)  
         encrypted_blob = bucket.blob(f"encrypted/{encrypted_filename}")
-
+        
+        #upload file
         encrypted_blob.upload_from_filename(local_encrypted_path)
 
         return jsonify({
@@ -191,7 +155,7 @@ def upload_file():
         "encrypted_file_gcs_path": f"gs://{GCS_BUCKET_NAME}/encrypted/{encrypted_filename}",
         }), 200
 
-    else:
+    except:
         #gcs error - use local folder
         return jsonify({
             "message": "File encrypted and uploaded to local file!",
@@ -203,32 +167,32 @@ def upload_file():
 #--------- download link function
 #------------------------------------------------------
 
-@app.route("/download", methods=["GET"])
-def generate_download_link():
+# @app.route("/download", methods=["GET"])
+# def generate_download_link():
  
-    credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
-    storage_client = storage.Client(credentials=credentials)
-    bucket = storage_client.bucket(GCS_BUCKET_NAME)
-    blob = bucket.blob(f"encrypted/{encrypted_filename}")
+#     credentials = service_account.Credentials.from_service_account_file(GCS_CREDENTIALS)
+#     storage_client = storage.Client(credentials=credentials)
+#     bucket = storage_client.bucket(GCS_BUCKET_NAME)
+#     blob = bucket.blob(f"encrypted/{encrypted_filename}")
 
-    if not blob.exists():
-        return jsonify({"error": f"File '{encrypted_filename}' not found"}), 404
+#     if not blob.exists():
+#         return jsonify({"error": f"File '{encrypted_filename}' not found"}), 404
 
 
-    url = blob.generate_signed_url(
-        version="v4",  # ✅ THIS MATTERS
-        expiration=timedelta(minutes=15),
-        method="GET",
-        credentials=credentials  # ✅ Make sure it uses the same creds
-    )
+#     url = blob.generate_signed_url(
+#         version="v4",  # ✅ THIS MATTERS
+#         expiration=timedelta(minutes=15),
+#         method="GET",
+#         credentials=credentials  # ✅ Make sure it uses the same creds
+#     )
     
     
-    return url, 200, {'Content-Type': 'text/plain'}
+#     return url, 200, {'Content-Type': 'text/plain'}
 
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
   
 
   
